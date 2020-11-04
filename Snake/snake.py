@@ -7,7 +7,9 @@
 
 
 import pygame as pg
+import random
 
+random.seed()
 pg.init()
 clock = pg.time.Clock()
 pg.display.set_caption('Snake') 
@@ -17,6 +19,11 @@ x = 0
 y = 0
 direction = 0
 done = False
+eaten = False
+generated = False
+
+def is_collided_with(self, sprite):
+    return self.rect.colliderect(sprite.rect)
 
 while not done:
         for event in pg.event.get():
@@ -58,6 +65,26 @@ while not done:
             y = 0
             
         screen.fill((0,0,0))
+
+        if eaten == False:
+            if generated == False:
+                xFood = random.randint(10, size - 10)
+                yFood = random.randint(10, size - 10)
+                generated = True
+        else:
+            generated = False
+            eaten = False
+        
+        food = pg.draw.rect(screen, (255,0,0), (xFood, yFood, 20, 20))
+        player = pg.draw.rect(screen, (255,255,255), (x, y, 25, 25))
+
+        
+
+        pg.draw.rect(screen, (255,0,0), (xFood, yFood, 20, 20))
         pg.draw.rect(screen, (255,255,255), (x, y, 25, 25))
+
+        if player.colliderect(food):
+            eaten = True
+
         pg.display.update()
         clock.tick(60)
