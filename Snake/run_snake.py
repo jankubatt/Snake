@@ -17,8 +17,9 @@ screen = pg.display.set_mode((size, size))
 player = [size/2, size/2]
 direction = 0
 done = False
-gameArray = [[" " for i in range(32)] for j in range(32)]
+gameArray = [[0 for i in range(32)] for j in range(32)]
 food = [random.randint(0, 32), random.randint(0, 32)]
+snakeLength = 1
 
 while not done:
     for event in pg.event.get():
@@ -60,7 +61,8 @@ while not done:
         player[1] = 0
 
     if player[0]/25 == food[0] and player[1]/25 == food[1]:
-        food = [random.randint(0, 32), random.randint(0, 32)]
+        food = [random.randint(1, 32), random.randint(1, 32)]
+        snakeLength += 1
                 
     screen.fill((0,0,0))
   
@@ -69,21 +71,19 @@ while not done:
             if i % 2 == 0 and j % 2 == 0:
                 pg.draw.rect(screen, (10,10,10), (25*i, 25*j, 25, 25))
             if i % 2 == 1 and j % 2 == 1:
-                pg.draw.rect(screen, (10,10,10), (25*i, 25*j, 25, 25))
-        
-    gameArray = [[" " for i in range(32)] for j in range(32)] 
-    if player[0] == 800:
-        gameArray[int(player[1]/25)][31] = "S"
-            
-    elif player[1] == 800:
-        gameArray[31][int(player[0]/25)] = "S"
+                pg.draw.rect(screen, (10,10,10), (25*i, 25*j, 25, 25)) 
 
-    else:
-        gameArray[int(player[1]/25)][int(player[0]/25)] = "S"
-        gameArray[food[1]][food[0]] = "F"
+    
+    for i in range(0, 32):
+        for j in range(0,32):
+            if gameArray[i][j] != 0:
+                gameArray[i][j] -= 1
+                pg.draw.rect(screen, (255, 255, 255), (i* 25, j * 25, 25, 25))
 
-    pg.draw.rect(screen, (255, 255, 255), (int(player[0]), int(player[1]), 25, 25))
-    pg.draw.rect(screen, (255, 0, 0), (food[0]*25, food[1]*25, 25, 25))
+    pg.draw.rect(screen, (255, 255, 255), (player[0], player[1], 25, 25))
+    gameArray[int(player[0]/25)][int(player[1]/25)] = snakeLength
+
+    pg.draw.rect(screen, (255, 0, 0), ((food[0]*25, food[1]*25, 25, 25)))
     pg.display.update()
     clock.tick(10)
 
