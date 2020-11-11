@@ -18,8 +18,12 @@ player = [size/2, size/2]
 direction = 0
 done = False
 gameArray = [[0 for i in range(32)] for j in range(32)]
-food = [random.randint(0, 32), random.randint(0, 32)]
-snakeLength = 1
+food = [random.randint(1, 31), random.randint(1, 31)]
+
+while player[0] == food[0] and player[1] == food[1]:
+    food = [random.randint(1, 31), random.randint(1, 31)]
+
+snakeLength = 0
 
 while not done:
     for event in pg.event.get():
@@ -49,19 +53,23 @@ while not done:
         player[1]-=25
 
     if player[0] < 0:
-        player[0] = size
+        player[0] = 775
 
     if player[1] < 0:
-        player[1] = size
+        player[1] = 775
 
-    if player[0] > size:
+    if player[0] >= size:
         player[0] = 0
 
-    if player[1] > size:
+    if player[1] >= size:
         player[1] = 0
 
     if player[0]/25 == food[0] and player[1]/25 == food[1]:
-        food = [random.randint(1, 32), random.randint(1, 32)]
+        food = [random.randint(1, 31), random.randint(1, 31)]
+
+        while gameArray[food[0]][food[1]] != 0:
+            food = [random.randint(1, 31), random.randint(1, 31)]
+
         snakeLength += 1
                 
     screen.fill((0,0,0))
@@ -81,7 +89,48 @@ while not done:
                 pg.draw.rect(screen, (255, 255, 255), (i* 25, j * 25, 25, 25))
 
     pg.draw.rect(screen, (255, 255, 255), (player[0], player[1], 25, 25))
-    gameArray[int(player[0]/25)][int(player[1]/25)] = snakeLength
+
+    if player[0] == 775 and player[1] == 775:
+        if gameArray[int(player[0]/25)][int(player[1]/25)] != 0:
+            snakeLength = 0
+            gameArray = [[0 for i in range(32)] for j in range(32)]
+
+        gameArray[int(player[0]/25)][int(player[1]/25)] = snakeLength
+        
+    elif player[0] == 775:
+        if gameArray[int(player[0]/25)][int(player[1]/25)] != 0:
+            snakeLength = 0
+            gameArray = [[0 for i in range(32)] for j in range(32)]
+
+        gameArray[int(player[0]/25)][int(player[1]/25)] = snakeLength
+
+    elif player[1] == 775:
+        if gameArray[int(player[0]/25)][int(player[1]/25)] != 0:
+            snakeLength = 0
+            gameArray = [[0 for i in range(32)] for j in range(32)]
+
+        gameArray[int(player[0]/25)][int(player[1]/25)] = snakeLength
+
+    elif player[0] == 0:
+        if gameArray[int(player[0]/25)][int(player[1]/25)] != 0:
+            snakeLength = 0
+            gameArray = [[0 for i in range(32)] for j in range(32)]
+
+        gameArray[int(player[0]/25)][int(player[1]/25)] = snakeLength
+
+    elif player[1] == 0:
+        if gameArray[int(player[0]/25)][int(player[1]/25)] != 0:
+            snakeLength = 0
+            gameArray = [[0 for i in range(32)] for j in range(32)]
+
+        gameArray[int(player[0]/25)][int(player[1]/25)] = snakeLength
+
+    else:
+        if gameArray[int(player[0]/25)][int(player[1]/25)] != 0:
+            snakeLength = 0
+            gameArray = [[0 for i in range(32)] for j in range(32)]
+
+        gameArray[int(player[0]/25)][int(player[1]/25)] = snakeLength
 
     pg.draw.rect(screen, (255, 0, 0), ((food[0]*25, food[1]*25, 25, 25)))
     pg.display.update()
